@@ -1,42 +1,39 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+:root{
+  --green-main: #2E7D6A;
+  --blue-secondary: #1E3D58;
+  --pure-white: #FFFFFF;
+  --light-gray: #F5F5F5;
+  --dark-gray: #333333;
+  --green-accent: #A8D5BA;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', 'Ubuntu', sans-serif;
+}
+
+.d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.d-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+
+@media only screen and (min-width: 881px) and (max-width: 1200px) {
+  html {
+    font-size: 14px;
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }

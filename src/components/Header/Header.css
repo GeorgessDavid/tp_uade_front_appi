@@ -1,0 +1,9 @@
+.header {
+    background-color: var(--green-main);
+    color: var(--pure-white);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
