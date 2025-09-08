@@ -1,9 +1,40 @@
-.header {
-    background-color: var(--green-main);
+.header{
+    display: flex;
+    flex-direction: column;
+}
+
+.first-header {
+    background-color: var(--blue-secondary);
     color: var(--pure-white);
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 1rem;
 }
 
+.first-header img {
+    height: 50px;
+    width: auto;
+    margin-left: 1rem;
+}
+
+.first-header a {
+    color: var(--pure-white);
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+}
+
+#login-link::after{
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: var(--pure-white);
+    transition: width .3s;
+}
+
+#login-link:hover::after {
+    width: 100%;
+}

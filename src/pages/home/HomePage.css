@@ -1,0 +1,37 @@
+
+.home {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+}
+
+.home img {
+  width: 500px;
+  border-radius: 50%;
+}
+
+.name {
+    color: var(--blue-secondary);
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.name span {
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.name h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.name h2 {
+    font-size: 3.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}

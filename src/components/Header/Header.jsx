@@ -1,9 +1,13 @@
 import './Header.css';
+import { Link } from 'react-router-dom';
+
 const Header = () => {
     return (
         <header className="header">
-            <h1>Dr. Martín Alejandro Suarez</h1> 
-            <h2>Especialista en Medicina General</h2>              
+            <div className="first-header">
+                <Link to="/"><img src="/logo_white.png" alt="Logo" /></Link>
+                <Link to="/login" id="login-link">Iniciar Sesión</Link>
+            </div>
         </header>
     )
 }
