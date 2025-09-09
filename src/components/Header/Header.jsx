@@ -1,25 +1,41 @@
 import './Header.css';
 import { Link } from 'react-router-dom';
-import { Tooltip } from '@mui/material';
+import { Tooltip, IconButton, useMediaQuery } from '@mui/material';
 import { Navbar, Sidebar } from '../index';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useState } from 'react';
 
-const Header = ({logged}) => {
+const Header = ({ logged }) => {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    }
     const publicOptions = [
-        {label: 'Inicio', path: '/'},
-        {label: 'Nosotros', path: '/#about'},
-        {label: 'Contacto', path: '/#contact'},
+        { label: 'Inicio', path: '/' },
+        { label: 'Nosotros', path: '/#about' },
+        { label: 'Contacto', path: '/#contact' },
     ];
 
     return (
         <header className="header">
             <div className="first-header">
+                {isMobile &&
+                    <IconButton onClick={toggleSidebar} size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+                        <MenuIcon />
+                    </IconButton>
+                }
                 <Tooltip title="Página principal" arrow placement="bottom" >
                     <Link to="/"><img src="/logo_white.png" alt="Logo" /></Link>
                 </Tooltip>
-                <Sidebar isOpen={true} toggleSidebar={() => {}} itemLists={publicOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)} position="left" title="Menú" />
-                {!logged && <Navbar options={publicOptions}/>}
-                {!logged && <Link to="/login" id="login-link">Iniciar Sesión</Link>}
+                {isMobile && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} itemLists={publicOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)} position="left" title="Menú" />}
+                {!isMobile &&
+                    <>
+                        {!logged && <Navbar options={publicOptions} />}
+                        {!logged && <Link to="/login" id="login-link">Iniciar Sesión</Link>}
+                    </>
+                }
             </div>
         </header>
     )
