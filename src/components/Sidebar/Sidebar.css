@@ -5,3 +5,11 @@
     padding: 1rem;
     color: var(--blue-secondary);
 }
+
+
+.drawer-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--gray-light);
+    text-align: center;
+    width: 100%;
+}

@@ -29,7 +29,9 @@ const Header = ({ logged }) => {
                 <Tooltip title="Página principal" arrow placement="bottom" >
                     <Link to="/"><img src="/logo_white.png" alt="Logo" /></Link>
                 </Tooltip>
-                {isMobile && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} itemLists={publicOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)} position="left" title="Menú" />}
+                {isMobile && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} itemLists={publicOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)} position="left" title="Menú" bottom={
+                    
+                    <Link to="/login" id="login-link">Iniciar Sesión</Link>} />}
                 {!isMobile &&
                     <>
                         {!logged && <Navbar options={publicOptions} />}
