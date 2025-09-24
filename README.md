@@ -1,2 +1,57 @@
-# tp_uade_front_appi
-Repositorio para el front-end con react para el trabajo práctico de Aplicaciones Interactivas
+# Trabajo Práctico Obligatorio 
+Este repositorio corresponde al Front-end del TPO.
+
+#### Integrantes
+---
+
+* Ramiro Carranza.
+* Luciano Conde.
+* Georges David.
+
+---
+
+## Enunciado
+
+### Landing Page
+* La página principal debe presentar al médico, su especialidad, formación, servicios ofrecidos y datos de contacto.
+* Debe incluir un formulario o enlace que permita reservar una cita.
+* Debe incluir un diseño responsivo y profesional acorde a la temática médica.
+
+
+---
+### Reserva de Citas
+* El formulario de reserva debe solicitar.
+    * Nombre y Apellido
+    * Nombre y Apellido del Paciente
+    * Teléfono
+    * Correo electrónico.
+    * Obra Social.
+* Debe incluir un calendario que muestre las citas disponibles durante las **dos próximas semanas**.
+* Las fechas y horarios disponibles deben actualizarse dinámicamente según la ocupación.
+* La obra social debe ser una lista de aquellas con las cuales el médico tiene convenio.
+
+---
+### Login para médico o secretaria
+* La landing page debe incluir un acceso para el médico o su secretaria mediante usuario y contraseña.
+* **No** se implementará registro de usuarios. Las credenciales del administrador.
+
+---
+### Gestión de Citas -- Área Administrativa
+* Una vez logueados, el médico o su secretaria podrán:
+    * Visualizar todas las citas solicitadas.
+    * Confirmar una cita cambiando su estado de *"Solicitada"* a *"Confirmada"*.
+
+---
+### Administración de Obras Sociales
+* El sistema debe permitir al usuario crear, modificar o eliminar obras sociales.
+* Estas serán las qeu se muestren en la funcionalidad de concretar cita.
+
+---
+### Notificaciones
+* Enviar notificación por correo electrónico al paciente cuando crea una nueva cita.
+* Enviar notificación por correo electrónico al paciente cuando la cita pase de *"Solicitada"* a *"Confirmada"*.
+
+---
+### Seguridad y Privacidad
+* Asegurar la protección de los datos de los pacientes y la privacidad de la información.
+* Implementar buenas prácticas de seguridad, como el cifrado de contraseñas del administrador.
