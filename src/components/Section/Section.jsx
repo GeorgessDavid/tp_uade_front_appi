@@ -9,9 +9,11 @@ import './Section.css';
  */
 const Section = ({ title, children, id, className }) => {
     return (
-        <section id={id} className={`section ${className}`}>
+        <section id={id} className={`section`}>
             <h2>{title}</h2>
-            {children}
+            <div className={`section-content ${className || ''}`}>
+                {children}
+            </div>
         </section>
     )
 }

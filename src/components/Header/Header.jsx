@@ -16,6 +16,7 @@ const Header = ({ logged }) => {
         { label: 'Inicio', path: '/' },
         { label: 'Nosotros', path: '/#about' },
         { label: 'Contacto', path: '/#contact' },
+        { label: 'Turnos', path: '/appointments' },
     ];
 
     return (
