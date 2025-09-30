@@ -8,5 +8,6 @@
   --light-gray: #F5F5F5;
   --dark-gray: #333333;
   --green-accent: #A8D5BA;
+  --red-danger: #ff2f2fff
 }
 ```

@@ -4,3 +4,15 @@
     height: 100vh;
     width: 100%;
 }
+
+.MuiDatePickerToolbar-title{
+    text-transform: capitalize;
+}
+
+.appointment-summary{
+    background-color: var(--blue-secondary);
+    padding: 1rem;
+    color: white !important;
+    border-radius: 8px;
+    border: 2px solid rgb(43, 93, 187)
+}
