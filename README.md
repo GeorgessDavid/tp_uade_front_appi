@@ -1,17 +1,38 @@
 # Trabajo Práctico Obligatorio 
 Este repositorio corresponde al Front-end del TPO.
 
-#### Integrantes
----
+--
+## Para empezar
+### Requisitos Previos
+* [Node.js](https://nodejs.org/es/download) >= Versión 18 (Recomendado LTS)
+* [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) o [pnpm](https://pnpm.io/installation).
+### 1. Clonar el Repositorio
+```bash
+git clone https://github.com/usuario/tp_api_front.git
+cd tp_api_front
+```
 
-* Ramiro Carranza.
-* Luciano Conde.
-* Georges David.
+### 2. Instalar Dependencias
+Con **pnpm** (recomendado):
+```bash
+pnpm install
+```
+o con **npm**:
+```bash
+npm install
+```
 
----
+### 3. Inicializar el proyecto
+```bash
+pnpm dev 
+```
+o
+```bash
+npm run dev
+```
 
-## Enunciado
 
+<details><summary><strong> Enunciado </strong></summary>
 ### Landing Page
 * La página principal debe presentar al médico, su especialidad, formación, servicios ofrecidos y datos de contacto.
 * Debe incluir un formulario o enlace que permita reservar una cita.
@@ -55,3 +76,13 @@ Este repositorio corresponde al Front-end del TPO.
 ### Seguridad y Privacidad
 * Asegurar la protección de los datos de los pacientes y la privacidad de la información.
 * Implementar buenas prácticas de seguridad, como el cifrado de contraseñas del administrador.
+</details>
+
+#### Integrantes
+---
+
+* Ramiro Carranza.
+* Luciano Conde.
+* Georges David.
+
+---
