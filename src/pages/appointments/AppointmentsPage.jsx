@@ -34,16 +34,18 @@ const AppointmentsPage = () => {
         <Section title="Reservar Turno" className="appointments-page">
             <div className='full-width'>
                 <span>Para sacar un turno, por favor, complete el siguiente formulario.</span>
-                <Form submitFunction={() => { }} loading={false} errors={{}} selectedDate={selectedDate} selectedTime={selectedTime} />
+                <Form submitFunction={() => { }} loading={false} errors={{}} selectedDate={selectedDate} selectedTime={selectedTime} isMobile={isMobile} />
             </div>
-            <Divider orientation="vertical" sx={{ margin: '2rem' }} variant='middle' />
+            <Divider orientation={isMobile ? "horizontal" : "vertical"} sx={{ margin: '2rem' }} variant='middle' />
             <div className='full-width'>
                 <Title text="2. Seleccione una fecha" size="l" color="primary" />
-                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es" localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}>
+                <LocalizationProvider sx={{ margin: '2rem 0' }} dateAdapter={AdapterDayjs} adapterLocale="es" localeText={esES.components.MuiLocalizationProvider.defaultProps.localeText}>
                     <StaticDatePicker orientation={isMobile ? "portrait" : "landscape"} disablePast maxDate={dayjs().add(2, 'week')} value={selectedDate} onChange={setSelectedDate}
                         slotProps={{
                             actionBar: { actions: ['today'] },
-                            toolbar: { toolbarFormat: 'dddd, D [de] MMMM' }
+                            toolbar: { toolbarFormat: 'dddd, D [de] MMMM',
+                                toolbarPlaceholder: 'Seleccione una fecha' 
+                             }
                         }}
                     />
                 </LocalizationProvider>
@@ -59,6 +61,10 @@ const AppointmentsPage = () => {
 
                     }
                 </div>
+
+                {isMobile && <Button variant="contained" color="primary" onClick={() => { }} sx={{ marginTop: '2rem' }} type='submit'>
+                    Confirmar Turno
+                </Button>}
             </div>
         </Section>
     )

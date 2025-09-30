@@ -3,11 +3,11 @@ import { Title, DataDisplay } from '../../../components';
 import dayjs from 'dayjs';
 dayjs.locale('es');
 
-export const AppointmentInfo = ({ data, confirm, loading }) => {
-    
+export const AppointmentInfo = ({ data, confirm, loading, isMobile }) => {
+
     return (
         <div>
-            {data.patientFirstName &&
+            {data.patientFirstName && !isMobile && 
                 <>
                     <Title text="Resumen del Turno" size="l" color="primary" />
                     <div className="appointment-summary">

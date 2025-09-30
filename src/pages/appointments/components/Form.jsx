@@ -158,6 +158,7 @@ export const Form = ({ submitFunction, loading, errors, ...rest }) => {
                 }}
                 confirm={() => { console.log('Confirmar Turno') }}
                 loading={false}
+                isMobile={rest.isMobile}
             />
         </FormControl>
     )

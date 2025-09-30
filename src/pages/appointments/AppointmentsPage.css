@@ -16,3 +16,14 @@
     border-radius: 8px;
     border: 2px solid rgb(43, 93, 187)
 }
+
+@media only screen and (min-width: 300px) and (max-width: 960px) {
+    .appointments-page{
+        flex-direction: column !important;
+        align-items: center;
+        gap: 2rem;
+        height: auto;
+    }
+
+    
+}
