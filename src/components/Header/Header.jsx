@@ -12,6 +12,7 @@ const Header = ({ logged }) => {
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     }
+
     const publicOptions = [
         { label: 'Inicio', path: '/' },
         { label: 'Nosotros', path: '/#about' },
@@ -19,6 +20,10 @@ const Header = ({ logged }) => {
         { label: 'Turnos', path: '/appointments' },
     ];
 
+    const loggedOptions = [
+        { label: 'Turnos', path: '/appointments/manage' },
+        { label: 'Obras Sociales', path: '/insurances' },
+    ];
     return (
         <header className="header">
             <div className="first-header">
@@ -30,12 +35,18 @@ const Header = ({ logged }) => {
                 <Tooltip title="Página principal" arrow placement="bottom" >
                     <Link to="/"><img src="/logo_white.png" alt="Logo" /></Link>
                 </Tooltip>
-                {isMobile && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} itemLists={publicOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)} position="left" title="Menú" bottom={
-                    
-                    <Link to="/login" id="login-link">Iniciar Sesión</Link>} />}
+                {isMobile && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar}
+                    itemLists={
+                        logged ? loggedOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)
+                            :
+                            publicOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)} position="left" title="Menú" bottom={
+
+                                <Link to="/login" id="login-link">Iniciar Sesión</Link>} />}
                 {!isMobile &&
                     <>
                         {!logged && <Navbar options={publicOptions} />}
+                        {logged && <Navbar options={loggedOptions} />}
+                        {logged && <Link to="/login" id="login-link">Cerrar Sesión</Link>}
                         {!logged && <Link to="/login" id="login-link">Iniciar Sesión</Link>}
                     </>
                 }
