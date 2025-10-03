@@ -6,3 +6,7 @@ export { default as Title } from './Title/Title';
 export { default as DataDisplay } from './DataDisplay/DataDisplay';
 export { default as Table } from './Table/Table';
 export { default as SelectChip } from './SelectChip/SelectChip';
+export { default as WrappedButton } from './WrappedButton/WrappedButton';
+export { default as Modal } from './Modal/Modal';
+export { default as SearchInput } from './SearchInput/SearchInput';
+export { default as DataBox } from './DataBox/DataBox';

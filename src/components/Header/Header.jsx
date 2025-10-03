@@ -1,16 +1,32 @@
 import './Header.css';
 import { Link } from 'react-router-dom';
 import { Tooltip, IconButton, useMediaQuery } from '@mui/material';
-import { Navbar, Sidebar } from '../index';
+import { Navbar, Sidebar, Modal } from '../index';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
 
 const Header = ({ logged }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [logoutModalOpen, setLogoutModalOpen] = useState(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
+    }
+
+    const handleLogoutClick = (e) => {
+        e.preventDefault();
+        setLogoutModalOpen(true);
+    }
+
+    const handleLogoutConfirm = () => {
+        setLogoutModalOpen(false);
+        // Aquí puedes agregar la lógica para cerrar sesión
+        window.location.href = '/login';
+    }
+
+    const handleLogoutCancel = () => {
+        setLogoutModalOpen(false);
     }
 
     const publicOptions = [
@@ -40,17 +56,38 @@ const Header = ({ logged }) => {
                         logged ? loggedOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)
                             :
                             publicOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)} position="left" title="Menú" bottom={
-
-                                <Link to="/login" id="login-link">Iniciar Sesión</Link>} />}
+                                logged ? 
+                                    <a href="#" onClick={handleLogoutClick} id="login-link">Cerrar Sesión</a>
+                                    :
+                                    <Link to="/login" id="login-link">Iniciar Sesión</Link>} />}
                 {!isMobile &&
                     <>
                         {!logged && <Navbar options={publicOptions} />}
                         {logged && <Navbar options={loggedOptions} />}
-                        {logged && <Link to="/login" id="login-link">Cerrar Sesión</Link>}
+                        {logged && <a href="#" onClick={handleLogoutClick} id="login-link">Cerrar Sesión</a>}
                         {!logged && <Link to="/login" id="login-link">Iniciar Sesión</Link>}
                     </>
                 }
             </div>
+            <Modal
+                open={logoutModalOpen}
+                onClose={handleLogoutCancel}
+                title="Confirmar cierre de sesión"
+                actions={[
+                    {
+                        label: "No",
+                        onClick: handleLogoutCancel,
+                        color: "primary"
+                    },
+                    {
+                        label: "Sí",
+                        onClick: handleLogoutConfirm,
+                        color: "error"
+                    }
+                ]}
+            >
+                <p>¿Estás seguro de que deseas cerrar sesión?</p>
+            </Modal>
         </header>
     )
 }

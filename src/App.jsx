@@ -3,7 +3,7 @@ import './App.css'
 import { Header } from './components';
 import { Routes, Route } from 'react-router-dom';
 import ThemeRegistry from './ThemeRegistry';
-import { Home, Login, Appointments, AppointmentsManage } from './pages';
+import { Home, Login, Appointments, AppointmentsManage, Insurance } from './pages';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/appointments/manage" element={<AppointmentsManage />} />
+        <Route path="/insurances" element={<Insurance />} />
       </Routes>
     </ThemeRegistry>
   )
