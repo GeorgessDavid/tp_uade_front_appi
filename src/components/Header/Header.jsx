@@ -32,9 +32,10 @@ const Header = ({ logged }) => {
 
     const publicOptions = [
         { label: 'Inicio', path: '/#' },
-        { label: 'Nosotros', path: '/#about' },
+        { label: 'Sobre Mí', path: '/#about' },
         { label: 'Contacto', path: '/#contact' },
         { label: 'Turnos', path: '/appointments' },
+        { label: 'Información', path: '/information' },
     ];
 
     const loggedOptions = [
