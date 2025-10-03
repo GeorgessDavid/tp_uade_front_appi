@@ -21,3 +21,10 @@
     gap: 1.5rem;
     align-items: center;
 }
+
+.insurance-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: flex-start;
+}

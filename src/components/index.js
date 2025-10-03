@@ -10,3 +10,5 @@ export { default as WrappedButton } from './WrappedButton/WrappedButton';
 export { default as Modal } from './Modal/Modal';
 export { default as SearchInput } from './SearchInput/SearchInput';
 export { default as DataBox } from './DataBox/DataBox';
+export { default as Dropzone } from './Dropzone/Dropzone';
+export { default as ProtectedRoute } from './ProtectedRoute/ProtectedRoute';

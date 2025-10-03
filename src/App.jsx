@@ -1,14 +1,17 @@
 
 import './App.css'
-import { Header } from './components';
+import { Header, ProtectedRoute } from './components';
 import { Routes, Route } from 'react-router-dom';
 import ThemeRegistry from './ThemeRegistry';
 import { Home, Login, Appointments, AppointmentsManage, Insurance } from './pages';
 import { ToastContainer } from 'react-toastify';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
-function App() {
+function AppContent() {
+  const { isLogged } = useAuth();
+
   return (
-    <ThemeRegistry>
+    <>
       <ToastContainer position="bottom-center"
         autoClose={5000}
         hideProgressBar={false}
@@ -21,14 +24,32 @@ function App() {
         theme="dark"
         toastStyle={{ background: "#101219", minWidth: "400px", maxWidth: "800px", color: "#fff" }}
       />
-      <Header logged={true}/>
+      <Header logged={isLogged}/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/appointments" element={<Appointments />} />
-        <Route path="/appointments/manage" element={<AppointmentsManage />} />
-        <Route path="/insurances" element={<Insurance />} />
+        <Route path="/appointments/manage" element={
+          <ProtectedRoute>
+            <AppointmentsManage />
+          </ProtectedRoute>
+        } />
+        <Route path="/insurances" element={
+          <ProtectedRoute>
+            <Insurance />
+          </ProtectedRoute>
+        } />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <ThemeRegistry>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </ThemeRegistry>
   )
 }

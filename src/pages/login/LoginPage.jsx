@@ -3,6 +3,8 @@ import { Tooltip, Button, TextField, IconButton, InputAdornment } from '@mui/mat
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { useLogin } from '../../hooks';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -11,6 +13,8 @@ const LoginPage = () => {
     const { register, handleSubmit, formState: { errors: formErrors } } = useForm();
     const [errors, setErrors] = useState({});
     const { loading, handleLogin, errors: loginErrors } = useLogin();
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -19,6 +23,14 @@ const LoginPage = () => {
     const resetErrors = () => {
         setErrors({});
     }
+
+    const onSubmit = async (data) => {
+        const success = await handleLogin(data);
+        if (success) {
+            login();
+            navigate('/');
+        }
+    };
 
     useEffect(() => {
         if (formErrors?.username) setErrors({ username: {msg: formErrors.username.message } });
@@ -31,7 +43,7 @@ const LoginPage = () => {
 
     return (
         <div className="login-page">
-            <form className="login-box" onSubmit={handleSubmit(data => handleLogin(data))}>
+            <form className="login-box" onSubmit={handleSubmit(onSubmit)}>
                 <h2>Iniciar Sesión</h2>
                 <TextField label="Usuario" variant="outlined"
                     {...register("username", { required: "Debe introducir un nombre de usuario."})}

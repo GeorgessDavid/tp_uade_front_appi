@@ -13,37 +13,37 @@
     cursor: pointer;
 }
 
-.primary {
+.select-chip.primary {
     background-color: #5ca6f0;
     border: 3px solid #115293;
     color: white;
 }
 
-.secondary {
+.select-chip.secondary {
     background-color: #f7c2d5;
     border: 3px solid #b45e7c;
     color: black;
 }
 
-.success {
+.select-chip.success {
     background-color: #388e3c;
     border: 3px solid #1b5e20;
     color: white
 }
 
-.error {
+.select-chip.error {
     background-color: #d32f2f;
     border: 3px solid #9a0007;
     color: white;
 }
 
-.warning {
+.select-chip.warning {
     background-color: #ed6c02;
     border: 3px solid #b65c00;
     color: white;
 }
 
-.info {
+.select-chip.info {
     background-color: #0288d1;
     border: 2px solid #01579b;
     color: white;

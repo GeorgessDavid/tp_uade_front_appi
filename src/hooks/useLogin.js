@@ -9,6 +9,8 @@ export const useLogin = () => {
 
     const handleLogin = useCallback(async (data) => {
         setLoading(true);
+        setError(null);
+        setSuccess(false);
 
         // Simulamos un usuario para el login
         const user = {
@@ -16,26 +18,34 @@ export const useLogin = () => {
             password: 'testpassword'
         }
         
-        try {
-            // Simulamos el proceso de login.
+        // Simulamos el proceso de login con un delay
+        return new Promise((resolve) => {
             setTimeout(() => {
-                if (data.password.length < 6) {
-                    setError({ password: { msg: 'La contraseña debe tener al menos 6 caracteres.' } });
-                    return;
-                }
+                try {
+                    if (data.password.length < 6) {
+                        setError({ password: { msg: 'La contraseña debe tener al menos 6 caracteres.' } });
+                        setLoading(false);
+                        resolve(false);
+                        return;
+                    }
 
-                if (data.username !== user.username || data.password !== user.password) {
-                    setError({ message: 'Usuario o contraseña incorrectos.' });
-                    return;
+                    if (data.username !== user.username || data.password !== user.password) {
+                        setError({ message: 'Usuario o contraseña incorrectos.' });
+                        setLoading(false);
+                        resolve(false);
+                        return;
+                    }
+                    
+                    setSuccess(true);
+                    setLoading(false);
+                    resolve(true);
+                } catch (error) {
+                    setError(error);
+                    setLoading(false);
+                    resolve(false);
                 }
-                setSuccess(true);
-                return;
-            }, 5000);
-        } catch (error) {
-            setError(error);
-        } finally {
-            setLoading(false);
-        }
+            }, 2000);
+        });
     }, []);
 
     useEffect(() => {

@@ -4,11 +4,13 @@ import { Tooltip, IconButton, useMediaQuery } from '@mui/material';
 import { Navbar, Sidebar, Modal } from '../index';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const Header = ({ logged }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [logoutModalOpen, setLogoutModalOpen] = useState(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
+    const { logout } = useAuth();
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -21,8 +23,7 @@ const Header = ({ logged }) => {
 
     const handleLogoutConfirm = () => {
         setLogoutModalOpen(false);
-        // Aquí puedes agregar la lógica para cerrar sesión
-        window.location.href = '/login';
+        logout();
     }
 
     const handleLogoutCancel = () => {
@@ -30,7 +31,7 @@ const Header = ({ logged }) => {
     }
 
     const publicOptions = [
-        { label: 'Inicio', path: '/' },
+        { label: 'Inicio', path: '/#' },
         { label: 'Nosotros', path: '/#about' },
         { label: 'Contacto', path: '/#contact' },
         { label: 'Turnos', path: '/appointments' },
