@@ -1,6 +1,6 @@
 
 import './App.css'
-import { Header, ProtectedRoute } from './components';
+import { Header, ProtectedRoute, Footer } from './components';
 import { Routes, Route } from 'react-router-dom';
 import ThemeRegistry from './ThemeRegistry';
 import { Home, Login, Appointments, AppointmentsManage, Insurance } from './pages';
@@ -40,6 +40,7 @@ function AppContent() {
           </ProtectedRoute>
         } />
       </Routes>
+      <Footer />
     </>
   );
 }

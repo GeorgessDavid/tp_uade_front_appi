@@ -1,19 +1,43 @@
 import { FormControl, TextField, InputLabel, Select, MenuItem } from '@mui/material'
 import { Title } from '../../../components';
-import { useState } from 'react';
+import { useState, forwardRef, useImperativeHandle } from 'react';
 import { AppointmentInfo } from './AppointmentInfo';
 import { useForm } from 'react-hook-form';
 
 
-export const Form = ({ submitFunction, loading, errors, ...rest }) => {
+export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, ref) => {
 
     const { selectedDate, selectedTime } = rest;
-    const { register, handleSubmit, watch, setValue } = useForm();
+    const { register, handleSubmit, watch, setValue, reset, formState } = useForm({
+        mode: 'onChange' // Validar en cada cambio
+    });
+    const { isValid } = formState;
+    
+    // Exponer el método reset al componente padre
+    useImperativeHandle(ref, () => ({
+        reset: () => {
+            reset();
+            setMailDomain('@gmail.com');
+            setSelectedObraSocial('');
+        }
+    }));
     const [mailDomain, setMailDomain] = useState('@gmail.com');
     const [selectedObraSocial, setSelectedObraSocial] = useState('');
 
     // Observar todos los valores del formulario en tiempo real
     const watchedValues = watch();
+
+    // Verificar si el formulario está completo y válido
+    const isFormComplete = isValid && 
+        selectedObraSocial && 
+        selectedTime && 
+        watchedValues.patientFirstName &&
+        watchedValues.patientLastName &&
+        watchedValues.email &&
+        watchedValues.phone &&
+        watchedValues.patientDNI &&
+        watchedValues.patientDOB &&
+        watchedValues.patientInsuranceNumber;
 
     const validDomains = [
         "gmail.com", "hotmail.com", "outlook.com", "yahoo.com",
@@ -65,13 +89,17 @@ export const Form = ({ submitFunction, loading, errors, ...rest }) => {
             <div className="d-flex gap-1rem space-between">
                 <div className="d-flex gap-1rem full-width">
                     <TextField fullWidth margin="normal"
-                        label="Email" name="email" type="email" required
+                        label="Email" name="email" type="text" required
                         error={!!errors?.email} helperText={errors?.email}
                         color="primary" variant="standard"
                         {...register("email", {
                             required: "El email es obligatorio",
-                            pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: "El email no es válido" },
-                            maxLength: { value: 100, message: "El email no debe exceder los 100 caracteres" }
+                            pattern: { 
+                                value: /^[a-zA-Z0-9._%+-]+$/, 
+                                message: "No incluyas el '@' ni el dominio. Solo la parte antes del @" 
+                            },
+                            maxLength: { value: 64, message: "El email no debe exceder los 64 caracteres" },
+                            validate: value => !value.includes('@') || "No incluyas el símbolo '@'. El dominio se selecciona aparte"
                         })}
                     />
                     <span style={{ marginTop: '2rem' }}>@</span>
@@ -85,9 +113,22 @@ export const Form = ({ submitFunction, loading, errors, ...rest }) => {
                     label="Teléfono" name="phone" required
                     error={!!errors?.phone} helperText={errors?.phone}
                     color="primary" variant="standard"
+                    onKeyDown={(e) => {
+                        const isNumber = /^[0-9]$/.test(e.key);
+                        const isControlKey = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key);
+                        const currentLength = e.target.value.length;
+                        
+                        if (!isNumber && !isControlKey) {
+                            e.preventDefault();
+                        }
+                        if (isNumber && currentLength >= 15) {
+                            e.preventDefault();
+                        }
+                    }}
                     {...register("phone", {
                         required: "El teléfono es obligatorio",
                         pattern: { value: /^[0-9]+$/, message: "El teléfono solo debe contener números" },
+                        maxLength: { value: 15, message: "El teléfono no debe exceder los 15 dígitos" }
                     })}
                 />
             </div>
@@ -96,6 +137,18 @@ export const Form = ({ submitFunction, loading, errors, ...rest }) => {
                     label="DNI" name="patientDNI" required
                     error={!!errors?.patientDNI} helperText={errors?.patientDNI}
                     color="primary" variant="standard"
+                    onKeyDown={(e) => {
+                        const isNumber = /^[0-9]$/.test(e.key);
+                        const isControlKey = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key);
+                        const currentLength = e.target.value.length;
+                        
+                        if (!isNumber && !isControlKey) {
+                            e.preventDefault();
+                        }
+                        if (isNumber && currentLength >= 8) {
+                            e.preventDefault();
+                        }
+                    }}
                     {...register("patientDNI", {
                         required: "El DNI es obligatorio",
                         pattern: { value: /^[0-9]+$/, message: "El DNI solo debe contener números" },
@@ -136,9 +189,22 @@ export const Form = ({ submitFunction, loading, errors, ...rest }) => {
                     label="Número de Afiliado" name="patientInsuranceNumber" required
                     error={!!errors?.patientInsuranceNumber} helperText={errors?.patientInsuranceNumber}
                     color="primary" variant="standard"
+                    onKeyDown={(e) => {
+                        const isNumber = /^[0-9]$/.test(e.key);
+                        const isControlKey = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key);
+                        const currentLength = e.target.value.length;
+                        
+                        if (!isNumber && !isControlKey) {
+                            e.preventDefault();
+                        }
+                        if (isNumber && currentLength >= 12) {
+                            e.preventDefault();
+                        }
+                    }}
                     {...register("patientInsuranceNumber", {
                         required: "El número de afiliado es obligatorio",
-                        pattern: { value: /^[0-9]+$/, message: "El número de afiliado solo debe contener números" }
+                        pattern: { value: /^[0-9]+$/, message: "El número de afiliado solo debe contener números" },
+                        maxLength: { value: 12, message: "El número de afiliado no debe exceder los 12 dígitos" }
                     })}
                 />
             </div>
@@ -156,10 +222,13 @@ export const Form = ({ submitFunction, loading, errors, ...rest }) => {
                     appointmentDate: selectedDate.format('DD/MM/YYYY'),
                     appointmentTime: selectedTime || undefined
                 }}
-                confirm={() => { console.log('Confirmar Turno') }}
-                loading={false}
+                confirm={handleSubmit(submitFunction)}
+                loading={loading}
                 isMobile={rest.isMobile}
+                isFormComplete={isFormComplete}
             />
         </FormControl>
     )
-}
+});
+
+Form.displayName = 'Form';

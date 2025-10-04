@@ -13,6 +13,8 @@ html {
   --light-gray: #F5F5F5;
   --dark-gray: #333333;
   --green-accent: #A8D5BA;
+  --bg-footer: #101219;
+  --ft-light-gray: #B0B0B0;
 }
 
 
@@ -45,14 +47,26 @@ html {
   width: 100%;
 }
 
-@media only screen and (min-width: 881px) and (max-width: 1200px) {
+@media only screen and (min-width: 1280px) and (max-width: 1365px) {
   html {
     font-size: 14px;
   }
 }
 
-@media only screen and (min-width: 400px) and (max-width: 880px) {
+@media only screen and (min-width: 1366px) and (max-width: 1600px) {
   html {
     font-size: 13px;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1279px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  html {
+    font-size: 12px;
   }
 }

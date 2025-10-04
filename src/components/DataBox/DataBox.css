@@ -30,7 +30,9 @@
 }
 
 .data-box .col > h2{
-    color: var(--blue-secondary)
+    color: var(--blue-secondary);
+    text-decoration: none;
+    border: none;
 }
 
 .data-box h3{

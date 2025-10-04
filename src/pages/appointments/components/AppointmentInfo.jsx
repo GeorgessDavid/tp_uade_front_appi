@@ -1,13 +1,13 @@
-import { Button } from '@mui/material';
+import { Button, Alert } from '@mui/material';
 import { Title, DataDisplay } from '../../../components';
 import dayjs from 'dayjs';
 dayjs.locale('es');
 
-export const AppointmentInfo = ({ data, confirm, loading, isMobile }) => {
+export const AppointmentInfo = ({ data, confirm, loading, isMobile, isFormComplete }) => {
 
     return (
         <div>
-            {data.patientFirstName && !isMobile && 
+            {data.patientFirstName && !isMobile &&
                 <>
                     <Title text="Resumen del Turno" size="l" color="primary" />
                     <div className="appointment-summary">
@@ -20,7 +20,18 @@ export const AppointmentInfo = ({ data, confirm, loading, isMobile }) => {
                         {data.appointmentDate && <DataDisplay label="Fecha del Turno" value={data.appointmentDate} />}
                         {data.appointmentTime && <DataDisplay label="Horario del Turno" value={data.appointmentTime} />}
                     </div>
-                    <Button variant="contained" color="primary" onClick={confirm} disabled={loading} sx={{ marginTop: '2rem' }} type='submit'>
+                    {!isFormComplete && <Alert severity="warning" sx={{ marginTop: '1rem' }}>
+                        Debes rellenar todos los campos del formulario y seleccionar una fecha y un horario para poder confirmar el turno.
+                    </Alert>
+                    }
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={confirm}
+                        disabled={loading || !isFormComplete}
+                        sx={{ marginTop: '2rem' }}
+                        type='submit'
+                    >
                         {loading ? 'Confirmando...' : 'Confirmar Turno'}
                     </Button>
                 </>

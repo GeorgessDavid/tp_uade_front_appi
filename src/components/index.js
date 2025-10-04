@@ -12,3 +12,5 @@ export { default as SearchInput } from './SearchInput/SearchInput';
 export { default as DataBox } from './DataBox/DataBox';
 export { default as Dropzone } from './Dropzone/Dropzone';
 export { default as ProtectedRoute } from './ProtectedRoute/ProtectedRoute';
+export { default as InformationBox } from './InformationBox/InformationBox';
+export { default as Footer } from './Footer/Footer';

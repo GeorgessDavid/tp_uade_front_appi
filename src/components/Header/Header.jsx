@@ -33,9 +33,9 @@ const Header = ({ logged }) => {
     const publicOptions = [
         { label: 'Inicio', path: '/#' },
         { label: 'Sobre Mí', path: '/#about' },
+        { label: 'Información', path: '/#information' },
         { label: 'Contacto', path: '/#contact' },
         { label: 'Turnos', path: '/appointments' },
-        { label: 'Información', path: '/information' },
     ];
 
     const loggedOptions = [
@@ -55,13 +55,17 @@ const Header = ({ logged }) => {
                 </Tooltip>
                 {isMobile && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar}
                     itemLists={
-                        logged ? loggedOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)
+                        logged ? loggedOptions.map(opt => 
+                            opt.path.includes('#') ? <a href={opt.path} onClick={toggleSidebar}>{opt.label}</a> : <Link to={opt.path} onClick={toggleSidebar}>{opt.label}</Link>
+                        )
                             :
-                            publicOptions.map(opt => <Link to={opt.path}>{opt.label}</Link>)} position="left" title="Menú" bottom={
+                            publicOptions.map(opt => 
+                                opt.path.includes('#') ? <a href={opt.path} onClick={toggleSidebar}>{opt.label}</a> : <Link to={opt.path} onClick={toggleSidebar}>{opt.label}</Link>
+                            )} position="left" title="Menú" bottom={
                                 logged ? 
                                     <a href="#" onClick={handleLogoutClick} id="login-link">Cerrar Sesión</a>
                                     :
-                                    <Link to="/login" id="login-link">Iniciar Sesión</Link>} />}
+                                    <Link to="/login" id="login-link" onClick={toggleSidebar}>Iniciar Sesión</Link>} />}
                 {!isMobile &&
                     <>
                         {!logged && <Navbar options={publicOptions} />}
