@@ -8,8 +8,8 @@ Este repositorio corresponde al Front-end del TPO.
 * [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) o [pnpm](https://pnpm.io/installation).
 ### 1. Clonar el Repositorio
 ```bash
-git clone https://github.com/usuario/tp_api_front.git
-cd tp_api_front
+https://github.com/GeorgessDavid/tp_uade_front_appi.git
+cd tp_uade_front_appi
 ```
 
 ### 2. Instalar Dependencias
