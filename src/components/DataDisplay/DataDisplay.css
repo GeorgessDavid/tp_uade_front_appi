@@ -1,0 +1,8 @@
+.data-display{
+    display: flex;
+    gap: 0.5rem;
+}
+
+.data-display__label{
+    font-weight: bold;
+}

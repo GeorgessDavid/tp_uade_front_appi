@@ -1,0 +1,50 @@
+.title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+
+/* Propiedades del tamaño del título. */
+.title.xs {
+    font-size: 0.25rem !important;
+}
+
+.title.s {
+    font-size: 0.5rem !important;
+}
+
+.title.m {
+    font-size: 1rem !important;
+}
+
+.title.l {
+    font-size: 1.5rem !important;
+}
+
+.title.xl {
+    font-size: 2rem !important;
+}
+
+.title.xxl {
+    font-size: 3rem !important;
+}
+
+
+/* Propiedades del color del título. */
+.title.primary {
+    color: var(--blue-secondary) !important;
+}
+
+
+.title.secondary {
+    color: var(--dark-gray) !important;
+}
+
+.title.success {
+    color: var(--green-main) !important;
+}
+
+.title.danger {
+    color: var(--red-danger) !important;
+}

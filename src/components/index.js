@@ -1,2 +1,16 @@
 export { default as Header } from './Header/Header';
 export { default as Section } from './Section/Section';
+export { default as Navbar } from './Navbar/Navbar';
+export { default as Sidebar } from './Sidebar/Sidebar';
+export { default as Title } from './Title/Title';
+export { default as DataDisplay } from './DataDisplay/DataDisplay';
+export { default as Table } from './Table/Table';
+export { default as SelectChip } from './SelectChip/SelectChip';
+export { default as WrappedButton } from './WrappedButton/WrappedButton';
+export { default as Modal } from './Modal/Modal';
+export { default as SearchInput } from './SearchInput/SearchInput';
+export { default as DataBox } from './DataBox/DataBox';
+export { default as Dropzone } from './Dropzone/Dropzone';
+export { default as ProtectedRoute } from './ProtectedRoute/ProtectedRoute';
+export { default as InformationBox } from './InformationBox/InformationBox';
+export { default as Footer } from './Footer/Footer';

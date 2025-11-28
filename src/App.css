@@ -8,17 +8,21 @@ html {
 :root{
   --green-main: #2E7D6A;
   --blue-secondary: #1E3D58;
+  --cian-tertiary: #80f7f7;
   --pure-white: #FFFFFF;
   --light-gray: #F5F5F5;
   --dark-gray: #333333;
   --green-accent: #A8D5BA;
+  --bg-footer: #101219;
+  --ft-light-gray: #B0B0B0;
 }
+
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Open Sans', 'Ubuntu', sans-serif;
+  font-family: 'Open Sans', 'Ubuntu', sans-serif !important;
 }
 
 .d-flex {
@@ -31,9 +35,38 @@ html {
   flex-direction: column;
 }
 
+.gap-1rem {
+  gap: 1rem;
+}
 
-@media only screen and (min-width: 881px) and (max-width: 1200px) {
+.space-between {
+  justify-content: space-between;
+}
+
+.full-width{
+  width: 100%;
+}
+
+@media only screen and (min-width: 1280px) and (max-width: 1365px) {
   html {
     font-size: 14px;
+  }
+}
+
+@media only screen and (min-width: 1366px) and (max-width: 1600px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1279px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 768px) {
+  html {
+    font-size: 12px;
   }
 }
