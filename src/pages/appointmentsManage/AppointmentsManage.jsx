@@ -63,13 +63,14 @@ const AppointmentsManagePage = () => {
         <div className="appointments-manage-page">
             <h1>Gestión de Turnos</h1>
             <div className="appointments-manage-content">
-                <Table columns={["Fecha", "Hora", "Paciente", "Documento", "Estado"]} loading={loading} placeholder={[1, 2, 3]}>
+                <Table columns={["Fecha", "Hora", "Paciente", "Documento", "Obra Social", "Estado"]} loading={loading} placeholder={[1, 2, 3]}>
                     {appointments.map((appointment, index) => (
                         <TableRow key={index}>
                             <TableCell sx={{ textAlign: 'center' }}>{dayjs(appointment.fecha).format('DD/MM/YYYY')}</TableCell>
                             <TableCell sx={{ textAlign: 'center' }}>{appointment.hora}</TableCell>
                             <TableCell sx={{ textAlign: 'center' }}>{appointment.paciente.nombre + ' ' + appointment.paciente.apellido}</TableCell>
                             <TableCell sx={{ textAlign: 'center' }}>{appointment.paciente.tipoDocumento + ' ' + appointment.paciente.documento}</TableCell>
+                            <TableCell sx={{ textAlign: 'center' }}>{appointment.paciente.obraSocial.siglas}</TableCell>
                             <TableCell sx={{ textAlign: 'center' }}>{renderStatusChip(appointment)}</TableCell>
                         </TableRow>
                     ))}
