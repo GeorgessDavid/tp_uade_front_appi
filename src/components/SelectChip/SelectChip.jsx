@@ -9,8 +9,9 @@ import './SelectChip.css';
  * @returns 
  */
 
-const SelectChip = ({ onClick, className, id, options, defaultValue }) => {
-    const selectedOption = options.find(option => option.value === defaultValue) || options[0];
+const SelectChip = ({ onClick, className, id, options, defaultValue, allOptions }) => {
+    // Buscar el color en todas las opciones, no solo en las filtradas
+    const selectedOption = (allOptions || options).find(option => option.value === defaultValue) || options[0];
     const { color } = selectedOption;
 
     return (

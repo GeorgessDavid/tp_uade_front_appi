@@ -1,4 +1,5 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, IconButton, Tooltip } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 /**
  * 
@@ -13,7 +14,16 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/
 const Modal = ({ open, onClose, title, children, actions, maxWidth = "sm" }) => {
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth={maxWidth}>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>{title}
+                <Tooltip title="Cerrar" arrow>
+                    <IconButton
+                        aria-label="close"
+                        onClick={onClose}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </Tooltip>
+            </DialogTitle>
             <DialogContent>{children}</DialogContent>
             <DialogActions>
                 {actions.map((action, index) => (

@@ -43,10 +43,55 @@ export const useObraSocial = () => {
             fetchObrasSociales();
         } catch (err) {
             setError(err);
+            toast.error(err.message || 'Error al crear la obra social');
         } finally {
             setLoading(false);
         }
     }, [fetchObrasSociales]);
 
-    return { obrasSociales, loading, error, fetchObrasSociales, createObraSocial, createStatus };
+    const deleteObraSocial = useCallback(async (id) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/obras-sociales/${id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Error al eliminar la obra social');
+            }
+
+            toast.success('Obra social eliminada con éxito');
+            fetchObrasSociales();
+        }catch (err) {
+            setError(err);
+            toast.error(err.message || 'Error al eliminar la obra social');
+        } finally {
+            setLoading(false);
+        };
+    }, [fetchObrasSociales]);
+
+    const updateObraSocial = useCallback(async (id, updatedData) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/obras-sociales/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || 'Error al actualizar la obra social');
+            }
+            toast.success('Obra social actualizada con éxito');
+            fetchObrasSociales();
+        } catch (err) {
+            toast.error(err.message || 'Error al actualizar la obra social');
+        }
+    }, [fetchObrasSociales]);
+    return { obrasSociales, loading, error, fetchObrasSociales, createObraSocial, createStatus, deleteObraSocial, updateObraSocial };
 }

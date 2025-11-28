@@ -23,6 +23,10 @@ const AppointmentsManagePage = () => {
         value: 'Atendido',
         color: 'success'
     }, {
+        label: 'Ausente',
+        value: 'Ausente',
+        color: 'error'
+    }, {
         label: 'En Espera',
         value: 'En_Espera',
         color: 'warning'
@@ -36,9 +40,40 @@ const AppointmentsManagePage = () => {
         updateTurno(appointmentId, { estado: newStatus });
     };
 
+    const getAvailableStatusOptions = (currentStatus) => {
+        // Estados bloqueados que no pueden cambiar
+        if (currentStatus === 'Cancelado' || currentStatus === 'Atendido' || currentStatus === 'Ausente') {
+            return [];
+        }
+
+        const currentOption = appointmentStatusOptions.find(opt => opt.value === currentStatus);
+
+        // Si está Confirmado, no puede volver a Solicitado
+        if (currentStatus === 'Confirmado') {
+            const availableOptions = appointmentStatusOptions.filter(option => 
+                option.value !== 'Solicitado'
+            );
+            // Asegurar que la opción actual esté primera
+            return currentOption ? [currentOption, ...availableOptions.filter(opt => opt.value !== currentStatus)] : availableOptions;
+        }
+
+        // Si está En Espera, no puede volver a Confirmado ni a Solicitado
+        if (currentStatus === 'En_Espera') {
+            const availableOptions = appointmentStatusOptions.filter(option => 
+                option.value === 'Cancelado' || option.value === 'Ausente' || option.value === 'Atendido'
+            );
+            // Incluir el estado actual primero
+            return currentOption ? [currentOption, ...availableOptions] : availableOptions;
+        }
+
+        // Para Solicitado, puede ir a cualquier estado
+        return appointmentStatusOptions;
+    };
+
     const renderStatusChip = (appointment) => {
         const statusOption = appointmentStatusOptions.find(estado => appointment.estado === estado.value);
-        const isLocked = appointment.estado === 'Cancelado' || appointment.estado === 'Atendido';
+        const availableOptions = getAvailableStatusOptions(appointment.estado);
+        const isLocked = availableOptions.length === 0;
 
         if (isLocked && statusOption) {
             return (
@@ -53,7 +88,8 @@ const AppointmentsManagePage = () => {
         return (
             <SelectChip
                 onClick={(e) => handleStatusChange(appointment.id, e.target.value)}
-                options={appointmentStatusOptions}
+                options={availableOptions}
+                allOptions={appointmentStatusOptions}
                 defaultValue={statusOption ? appointment.estado : appointmentStatusOptions[0].value}
             />
         );

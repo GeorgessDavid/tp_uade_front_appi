@@ -29,6 +29,7 @@ export const useTurnos = () => {
             if (!response.ok) throw new Error(data.message || 'Error al crear el turno');
             setStatus(response.status);
             if (response.status === 201) toast.success('Turno creado con éxito');
+            setTimeout(() => window.location.reload(), 4000);
         }catch (err) {
             setError(err);
             console.error('Error al crear el turno:', err);
@@ -53,11 +54,10 @@ export const useTurnos = () => {
                 }
             });
 
-            if (!response.ok) toast.error('Error al obtener los turnos');
+            if (!response.ok && response.status !== 404 && response.status !== 401) toast.error('Error al obtener los turnos');
             const data = await response.json();
             setTurnos(data.data);
         } catch (err) {
-            setError(err);
             console.error('Error al obtener los turnos:', err);
         } finally {
             setLoading(false);

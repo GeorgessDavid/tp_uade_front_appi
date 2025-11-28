@@ -15,7 +15,7 @@ export const useHorarioAtencion = () => {
 
             if (!response.ok) return setHorasDisponibles('No hay turnos disponibles');
             setHorasDisponibles(data.slots);
-            console.log('Horarios disponibles:', data.slots);
+            
         } catch (err) {
             setError(err);
         } finally {

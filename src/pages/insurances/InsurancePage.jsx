@@ -16,7 +16,7 @@ const InsurancePage = () => {
     const [selectedInsurance, setSelectedInsurance] = useState(null);
     const [editData, setEditData] = useState({});
     const { register, handleSubmit } = useForm();
-    const { obrasSociales, createObraSocial } = useObraSocial();
+    const { obrasSociales, createObraSocial, deleteObraSocial, updateObraSocial } = useObraSocial();
 
     const handleModal = () => {
         setModalOpen(!modalOpen);
@@ -27,9 +27,11 @@ const InsurancePage = () => {
             // Al abrir el modal, inicializar los datos de edición
             setEditData({
                 [index]: {
+                    id: obra.id,
+                    rna: obra.rna,
                     siglas: obra.siglas,
                     nombre: obra.nombre,
-                    tipo: obra.tipo
+                    // tipo: obra.tipo
                 }
             });
             setEditMode({ [index]: false });
@@ -48,12 +50,13 @@ const InsurancePage = () => {
     }
 
     const handleDeleteClick = (index, obra) => {
+        console.log(index, obra);
         setSelectedInsurance({ index, obra });
         setDeleteConfirmOpen(true);
     }
 
     const handleDeleteConfirm = () => {
-        // Aquí puedes manejar la eliminación de la obra social
+        deleteObraSocial(selectedInsurance.obra.id);
         console.log('Eliminando obra social:', selectedInsurance);
         toast.success(`Cobertura médica "${selectedInsurance.obra.siglas}" eliminada exitosamente`);
         setDeleteConfirmOpen(false);
@@ -80,8 +83,7 @@ const InsurancePage = () => {
     }
 
     const handleSaveEdit = (index) => {
-        // Aquí puedes manejar el guardado de la edición
-        console.log('Guardando cambios:', editData[index]);
+        updateObraSocial(editData[index].id, editData[index]);
         toast.success(`Cobertura médica "${editData[index].siglas}" actualizada exitosamente`);
         setEditMode(prev => ({
             ...prev,

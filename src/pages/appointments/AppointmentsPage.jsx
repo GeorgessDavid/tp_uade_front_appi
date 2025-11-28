@@ -36,7 +36,7 @@ const AppointmentsPage = () => {
         const turnoData = {
             fecha: selectedDate.format('YYYY-MM-DD'),
             hora: selectedTime,
-            Profesional_id: 2,
+            Profesional_id: 1,
             paciente:{
                 nombre: formData.patientFirstName,
                 apellido: formData.patientLastName,
