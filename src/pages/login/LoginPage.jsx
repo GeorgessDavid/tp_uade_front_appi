@@ -13,7 +13,7 @@ const LoginPage = () => {
     const { register, handleSubmit, formState: { errors: formErrors } } = useForm();
     const [errors, setErrors] = useState({});
     const { loading, handleLogin, errors: loginErrors } = useLogin();
-    const { login } = useAuth();
+    const { isLogged } = useAuth();
     const navigate = useNavigate();
 
     const togglePasswordVisibility = () => {
@@ -24,37 +24,33 @@ const LoginPage = () => {
         setErrors({});
     }
 
+    useEffect(() => {
+        if (isLogged) navigate('/appointments/manage');
+    }, [isLogged, navigate]);
+
     const onSubmit = async (data) => {
-        const success = await handleLogin(data);
-        if (success) {
-            login();
-            navigate('/');
-        }
+        await handleLogin(data);
     };
 
     useEffect(() => {
-        if (formErrors?.username) setErrors({ username: {msg: formErrors.username.message } });
-        else if (formErrors?.password || loginErrors?.password) setErrors({ password: {msg: formErrors.password.message || loginErrors.password.msg } });
+        if (formErrors?.usuario) setErrors({ usuario: {msg: formErrors.usuario.message } });
+        else if (formErrors?.contrasena || loginErrors?.contrasena) setErrors({ contrasena: {msg: formErrors.contrasena.message || loginErrors.contrasena.msg } });
     }, [formErrors, errors, loginErrors]);
-
-    useEffect(() => {
-        console.log('component loading changed', loading);
-    },[loading]);
 
     return (
         <div className="login-page">
             <form className="login-box" onSubmit={handleSubmit(onSubmit)}>
                 <h2>Iniciar Sesión</h2>
                 <TextField label="Usuario" variant="outlined"
-                    {...register("username", { required: "Debe introducir un nombre de usuario."})}
-                    error={!!errors.username}
-                    helperText={errors.username ? errors.username.msg : ''}
+                    {...register("usuario", { required: "Debe introducir un nombre de usuario."})}
+                    error={!!errors.usuario}
+                    helperText={errors.usuario ? errors.usuario.msg : ''}
                     onInput={resetErrors}
                 />
                 <TextField label="Contraseña" type={showPassword ? "text" : "password"} variant="outlined"
-                    {...register("password", { required: "Debe introducir una contraseña."})}
-                    error={!!errors.password}
-                    helperText={errors.password ? errors.password.msg : ''}
+                    {...register("contrasena", { required: "Debe introducir una contraseña."})}
+                    error={!!errors.contrasena}
+                    helperText={errors.contrasena ? errors.contrasena.msg : ''}
                     onInput={resetErrors}
                     slotProps={{
                         input: {

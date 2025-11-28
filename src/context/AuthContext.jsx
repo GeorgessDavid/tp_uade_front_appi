@@ -1,35 +1,49 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Cookies from 'js-cookie';
 const AuthContext = createContext();
+import { toast } from 'react-toastify';
 
 export const AuthProvider = ({ children }) => {
     const [isLogged, setIsLogged] = useState(() => {
-        // Inicializar desde localStorage
-        const stored = localStorage.getItem('isLogged');
-        return stored === 'true';
+        // Inicializar desde session cookie
+        const authCookie = Cookies.get('auth');
+        console.log('AuthContext initial isLogged from cookie:', authCookie);
+        return authCookie ? true : false;
+
     });
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Sincronizar con localStorage cuando cambie el estado
-        localStorage.setItem('isLogged', isLogged.toString());
+        console.log('AuthContext isLogged changed:', isLogged);
     }, [isLogged]);
 
     const login = () => {
         setIsLogged(true);
-        localStorage.setItem('isLogged', 'true');
+        // localStorage.setItem('isLogged', 'true');
     };
 
-    const logout = () => {
-        setIsLogged(false);
-        localStorage.setItem('isLogged', 'false');
-        navigate('/login');
+    const logout = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/logout`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+            
+            if (!response.ok) return toast.error('Error al cerrar sesión.');
+            
+            Cookies.remove('auth');
+            setIsLogged(false);
+            toast.success('Sesión cerrada correctamente.');
+            navigate('/login');
+        } catch (err) {
+            console.error('Error during logout:', err);
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ isLogged, login, logout }}>
+        <AuthContext.Provider value={{ isLogged, login, logout, setIsLogged }}>
             {children}
         </AuthContext.Provider>
     );
