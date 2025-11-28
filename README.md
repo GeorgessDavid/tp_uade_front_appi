@@ -22,7 +22,12 @@ o con **npm**:
 npm install
 ```
 
-### 3. Inicializar el proyecto
+### 3. Asignar variables de entorno
+```js
+VITE_API_URL="http://localhost:3001"
+```
+
+### 4. Inicializar el proyecto
 ```bash
 pnpm dev 
 ```
