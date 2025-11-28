@@ -1,5 +1,5 @@
 import { Section, Title, DataDisplay, DataBox, InformationBox, WrappedButton } from '../../components';
-import { obrasSociales } from '../../data/obrasSociales';
+import { useObraSocial } from '../../hooks/useObraSocial';
 import { Servicios } from '../../data/servicios';
 import { useMediaQuery } from '@mui/material';
 import { useEffect } from 'react';
@@ -17,6 +17,8 @@ const HomePage = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
     const location = useLocation();
     const navigate = useNavigate();
+
+    const { obrasSociales, loading: loadingObrasSociales } = useObraSocial();
 
     useEffect(() => {
         // Detectar si hay un hash en la URL y hacer scroll al elemento
@@ -59,8 +61,8 @@ const HomePage = () => {
                     </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
-                    <WrappedButton 
-                        text="Sacar Turno" 
+                    <WrappedButton
+                        text="Sacar Turno"
                         action={() => navigate('/appointments')}
                         icon={<CalendarMonthIcon />}
                     />
@@ -68,15 +70,22 @@ const HomePage = () => {
                 <Title text="Obras Sociales Aceptadas" size='l' />
                 <div className="home-information">
                     <div className="information-insurances">
-                        {obrasSociales.map((obra, index) => (
-                            <DataBox
-                                key={index}
-                                title={obra.siglas}
-                                description={obra.nombre}
-                                logo={obra.logo}
-                                noTooltip={true}
-                            />
-                        ))}
+                        {
+                            loadingObrasSociales ? (
+                                <span>Cargando obras sociales...</span>
+                            ) : obrasSociales.length === 0 ? (
+                                <span>No se encontraron obras sociales.</span>
+                            ) : (
+                                obrasSociales.map((obra, index) => (
+                                    <DataBox
+                                        key={index}
+                                        title={obra.siglas}
+                                        description={obra.nombre}
+                                        noTooltip={true}
+                                    />
+                                ))
+                            )
+                        }
                     </div>
 
                 </div>

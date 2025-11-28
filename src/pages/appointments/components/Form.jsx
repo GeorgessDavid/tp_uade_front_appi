@@ -1,4 +1,5 @@
 import { FormControl, TextField, InputLabel, Select, MenuItem } from '@mui/material'
+import { useObraSocial } from '../../../hooks';
 import { Title } from '../../../components';
 import { useState, forwardRef, useImperativeHandle } from 'react';
 import { AppointmentInfo } from './AppointmentInfo';
@@ -6,31 +7,48 @@ import { useForm } from 'react-hook-form';
 
 
 export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, ref) => {
-
+    const { obrasSociales } = useObraSocial();
     const { selectedDate, selectedTime } = rest;
-    const { register, handleSubmit, watch, setValue, reset, formState } = useForm({
+    const { register, watch, setValue, reset, formState } = useForm({
         mode: 'onChange' // Validar en cada cambio
     });
     const { isValid } = formState;
-    
-    // Exponer el método reset al componente padre
+
+    const [mailDomain, setMailDomain] = useState('@gmail.com');
+    const [selectedObraSocial, setSelectedObraSocial] = useState('');
+    const [documentType, setDocumentType] = useState('DNI');
+    const [biologicalSex, setBiologicalSex] = useState('');
+
+    // Exponer el método reset y submitForm al componente padre
     useImperativeHandle(ref, () => ({
         reset: () => {
             reset();
             setMailDomain('@gmail.com');
             setSelectedObraSocial('');
+            setDocumentType('DNI');
+            setBiologicalSex('');
+        },
+        submitForm: () => {
+            const formData = {
+                ...watchedValues,
+                documentType: documentType,
+                emailDomain: mailDomain,
+                patientInsurance: selectedObraSocial,
+                biologicalSex: biologicalSex
+            };
+            submitFunction(formData);
         }
     }));
-    const [mailDomain, setMailDomain] = useState('@gmail.com');
-    const [selectedObraSocial, setSelectedObraSocial] = useState('');
 
     // Observar todos los valores del formulario en tiempo real
     const watchedValues = watch();
 
     // Verificar si el formulario está completo y válido
-    const isFormComplete = isValid && 
-        selectedObraSocial && 
-        selectedTime && 
+    const isFormComplete = isValid &&
+        selectedObraSocial &&
+        selectedTime &&
+        documentType &&
+        biologicalSex &&
         watchedValues.patientFirstName &&
         watchedValues.patientLastName &&
         watchedValues.email &&
@@ -45,11 +63,19 @@ export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, re
         "arnet.com.ar", "hotmail.com.ar", "yahoo.com.ar", "outlook.es", "icloud.com.ar"
     ]
 
-    const obrasSociales = ["OSDE", "Swiss Medical", "Galeno", "Medifé", "IOMA"]
+    const documentTypes = ["DNI", "LC", "LE"];
 
     const handleDomainChange = (event) => {
         setMailDomain(event.target.value);
     };
+
+    const handleDocumentTypeChange = (event) => {
+        setDocumentType(event.target.value);
+    };
+
+    const handleBiologicalSexChange = (event) => {
+        setBiologicalSex(event.target.value);
+    }
 
     const handleObraSocialChange = (event) => {
         const value = event.target.value;
@@ -57,10 +83,15 @@ export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, re
         setValue('patientInsurance', value); // Sincronizar con react-hook-form
     };
 
+    const handleEmailKeyDown = (e) => {
+        // Impedir que se pueda escribir el símbolo @
+        if (e.key === '@') {
+            e.preventDefault();
+        }
+    };
+
     return (
-        <FormControl className="appointment-form gap-1rem" onSubmit={
-            handleSubmit(submitFunction)
-        } disabled={loading} error={!!errors} fullWidth>
+        <form className="appointment-form gap-1rem" style={{ opacity: loading ? 0.6 : 1 }}>
             <Title text="1. Datos Personales" size="l" color="primary" />
             <div className="d-flex gap-1rem space-between">
                 <TextField fullWidth margin="normal"
@@ -92,11 +123,13 @@ export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, re
                         label="Email" name="email" type="text" required
                         error={!!errors?.email} helperText={errors?.email}
                         color="primary" variant="standard"
+                        autoComplete="off"
+                        onKeyDown={handleEmailKeyDown}
                         {...register("email", {
                             required: "El email es obligatorio",
-                            pattern: { 
-                                value: /^[a-zA-Z0-9._%+-]+$/, 
-                                message: "No incluyas el '@' ni el dominio. Solo la parte antes del @" 
+                            pattern: {
+                                value: /^[a-zA-Z0-9._%+-]+$/,
+                                message: "No incluyas el '@' ni el dominio. Solo la parte antes del @"
                             },
                             maxLength: { value: 64, message: "El email no debe exceder los 64 caracteres" },
                             validate: value => !value.includes('@') || "No incluyas el símbolo '@'. El dominio se selecciona aparte"
@@ -117,7 +150,7 @@ export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, re
                         const isNumber = /^[0-9]$/.test(e.key);
                         const isControlKey = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key);
                         const currentLength = e.target.value.length;
-                        
+
                         if (!isNumber && !isControlKey) {
                             e.preventDefault();
                         }
@@ -133,56 +166,73 @@ export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, re
                 />
             </div>
             <div className="d-flex gap-1rem space-between">
-                <TextField fullWidth margin="normal"
-                    label="DNI" name="patientDNI" required
-                    error={!!errors?.patientDNI} helperText={errors?.patientDNI}
-                    color="primary" variant="standard"
-                    onKeyDown={(e) => {
-                        const isNumber = /^[0-9]$/.test(e.key);
-                        const isControlKey = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key);
-                        const currentLength = e.target.value.length;
-                        
-                        if (!isNumber && !isControlKey) {
-                            e.preventDefault();
-                        }
-                        if (isNumber && currentLength >= 8) {
-                            e.preventDefault();
-                        }
-                    }}
-                    {...register("patientDNI", {
-                        required: "El DNI es obligatorio",
-                        pattern: { value: /^[0-9]+$/, message: "El DNI solo debe contener números" },
-                        minLength: { value: 7, message: "El DNI debe tener al menos 7 caracteres" },
-                        maxLength: { value: 8, message: "El DNI no debe exceder los 8 caracteres" }
-                    })}
-                />
-                <TextField fullWidth margin="normal"
-                    label="Fecha de Nacimiento" name="patientDOB" type="date"
-                    slotProps={{
-                        inputLabel: {
-                            shrink: true
-                        },
-                        htmlInput: {
-                            max: new Date().toISOString().split("T")[0] // Fecha máxima es hoy
-                        }
-                    }} required
-                    error={!!errors?.patientDOB} helperText={errors?.patientDOB}
-                    color="primary" variant="standard"
-                    {...register("patientDOB", {
-                        required: "La fecha de nacimiento es obligatoria",
-                        validate: value => {
-                            const today = new Date();
-                            const dob = new Date(value);
-                            return dob < today || "La fecha de nacimiento debe ser anterior a la fecha actual";
-                        }
-                    })}
-                />
+                <div className="d-flex gap-1rem full-width">
+                    <FormControl fullWidth margin="normal" variant="standard">
+                        <InputLabel id="document-type-label">Tipo</InputLabel>
+                        <Select fullWidth margin="normal" labelId="document-type-label" label="Tipo" name="documentType" value={documentType} onChange={handleDocumentTypeChange} required color="primary" variant="standard">
+                            {documentTypes.map(type => <MenuItem key={type} value={type}>{type}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                    <TextField fullWidth margin="normal"
+                        label="Número de Documento" name="patientDNI" required
+                        error={!!errors?.patientDNI} helperText={errors?.patientDNI}
+                        color="primary" variant="standard"
+                        onKeyDown={(e) => {
+                            const isNumber = /^[0-9]$/.test(e.key);
+                            const isControlKey = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key);
+                            const currentLength = e.target.value.length;
+
+                            if (!isNumber && !isControlKey) {
+                                e.preventDefault();
+                            }
+                            if (isNumber && currentLength >= 8) {
+                                e.preventDefault();
+                            }
+                        }}
+                        {...register("patientDNI", {
+                            required: "El número de documento es obligatorio",
+                            pattern: { value: /^[0-9]+$/, message: "El número de documento solo debe contener números" },
+                            minLength: { value: 7, message: "El número de documento debe tener al menos 7 caracteres" },
+                            maxLength: { value: 8, message: "El número de documento no debe exceder los 8 caracteres" }
+                        })}
+                    />
+                </div>
+                <div className="d-flex gap-1rem full-width">
+                    <FormControl fullWidth margin="normal" variant="standard">
+                        <InputLabel id="biologicalSex">Sexo Biológico</InputLabel>
+                        <Select fullWidth margin="normal" labelId="biologicalSex" label="Sexo Biológico" name="biologicalSex" value={biologicalSex} onChange={handleBiologicalSexChange} required color="primary" variant="standard">
+                            <MenuItem value="Masculino">Masculino</MenuItem>
+                            <MenuItem value="Femenino">Femenino</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <TextField fullWidth margin="normal"
+                        label="Fecha de Nacimiento" name="patientDOB" type="date"
+                        slotProps={{
+                            inputLabel: {
+                                shrink: true
+                            },
+                            htmlInput: {
+                                max: new Date().toISOString().split("T")[0] // Fecha máxima es hoy
+                            }
+                        }} required
+                        error={!!errors?.patientDOB} helperText={errors?.patientDOB}
+                        color="primary" variant="standard"
+                        {...register("patientDOB", {
+                            required: "La fecha de nacimiento es obligatoria",
+                            validate: value => {
+                                const today = new Date();
+                                const dob = new Date(value);
+                                return dob < today || "La fecha de nacimiento debe ser anterior a la fecha actual";
+                            }
+                        })}
+                    />
+                </div>
             </div>
             <div className="d-flex gap-1rem space-between">
                 <FormControl fullWidth margin="normal" variant="standard">
                     <InputLabel id="obra-social-label">Obra Social</InputLabel>
                     <Select fullWidth margin="normal" labelId="obra-social-label" label="Obra Social" name="patientInsurance" value={selectedObraSocial} onChange={handleObraSocialChange} required error={!!errors?.patientInsurance} color="primary" variant="standard">
-                        {obrasSociales.map(obra => <MenuItem key={obra} value={obra}>{obra}</MenuItem>)}
+                        {obrasSociales.map(obra => <MenuItem key={obra.rna} value={obra.id}>{obra.siglas}</MenuItem>)}
                     </Select>
                 </FormControl>
                 <TextField fullWidth margin="normal"
@@ -193,7 +243,7 @@ export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, re
                         const isNumber = /^[0-9]$/.test(e.key);
                         const isControlKey = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key);
                         const currentLength = e.target.value.length;
-                        
+
                         if (!isNumber && !isControlKey) {
                             e.preventDefault();
                         }
@@ -216,18 +266,27 @@ export const Form = forwardRef(({ submitFunction, loading, errors, ...rest }, re
                     emailDomain: mailDomain,
                     phone: watchedValues.phone || undefined,
                     patientDNI: watchedValues.patientDNI || undefined,
+                    documentType: documentType,
                     patientDOB: watchedValues.patientDOB || undefined,
-                    patientInsurance: selectedObraSocial,
+                    patientInsurance: obrasSociales.find(obra => obra.id === selectedObraSocial)?.siglas || undefined,
                     patientInsuranceNumber: watchedValues.patientInsuranceNumber || undefined,
                     appointmentDate: selectedDate.format('DD/MM/YYYY'),
-                    appointmentTime: selectedTime || undefined
+                    appointmentTime: selectedTime || undefined,
+                    biologicalSex: biologicalSex || undefined
                 }}
-                confirm={handleSubmit(submitFunction)}
+                confirm={() => {                    
+                    submitFunction({
+                    ...watchedValues,
+                    documentType: documentType,
+                    emailDomain: mailDomain,
+                    patientInsurance: selectedObraSocial,
+                    biologicalSex: biologicalSex
+                })}}
                 loading={loading}
                 isMobile={rest.isMobile}
                 isFormComplete={isFormComplete}
             />
-        </FormControl>
+        </form>
     )
 });
 

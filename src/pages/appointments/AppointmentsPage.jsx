@@ -4,8 +4,9 @@ import { Form } from './components/Form';
 import { LocalizationProvider, StaticDatePicker } from '@mui/x-date-pickers';
 import { esES } from '@mui/x-date-pickers/locales';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useHorarioAtencion, useTurnos } from '../../hooks';
 import { useState, useEffect, useRef } from 'react';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import 'dayjs/locale/es';
 import dayjs from 'dayjs'
 dayjs().locale('es');
@@ -14,92 +15,44 @@ import './AppointmentsPage.css';
 const AppointmentsPage = () => {
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const [selectedTime, setSelectedTime] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [occupiedSlots, setOccupiedSlots] = useState({});
+    // const [loading, setLoading] = useState(false);
+    
     const formRef = useRef(null);
     const isMobile = useMediaQuery('(max-width:600px)');
 
+    const { horasDisponibles: horarios, fetchHorasDisponibles } = useHorarioAtencion();
+    const { createTurno, loading: creatingTurno } = useTurnos();
+    
     useEffect(() => {
         setSelectedTime(null);
     }, [selectedDate])
 
-    // Simular horarios ocupados (esto vendría del backend en producción)
     useEffect(() => {
-        // Ejemplo de horarios ocupados por fecha
-        const mockOccupiedSlots = {
-            [dayjs().format('YYYY-MM-DD')]: ['09:00', '09:30', '10:00'],
-            [dayjs().add(1, 'day').format('YYYY-MM-DD')]: ['09:10', '09:40'],
-            [dayjs().add(2, 'day').format('YYYY-MM-DD')]: ['09:20', '09:50'],
-        };
-        setOccupiedSlots(mockOccupiedSlots);
-    }, [])
+        const dia = selectedDate.format('d')
+        fetchHorasDisponibles(selectedDate.format('YYYY-MM-DD'), dia);
+    }, [selectedDate, fetchHorasDisponibles])
 
-    const horarios = [
-        { value: '09:00', label: '09:00' },
-        { value: '09:10', label: '09:10' },
-        { value: '09:20', label: '09:20' },
-        { value: '09:30', label: '09:30' },
-        { value: '09:40', label: '09:40' },
-        { value: '09:50', label: '09:50' },
-        { value: '10:00', label: '10:00' }
-    ]
-
-    // Función para enviar el turno
-    const handleSubmitAppointment = async (data) => {
-        if (!selectedTime) {
-            toast.error('Por favor, seleccione un horario');
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-            // Preparar los datos del turno
-            const appointmentData = {
-                ...data,
-                email: `${data.email}${data.emailDomain}`,
-                appointmentDate: selectedDate.format('YYYY-MM-DD'),
-                appointmentTime: selectedTime,
-                status: 'Solicitada'
-            };
-
-            // Simular llamada a API (aquí se haría la llamada al backend)
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            console.log('Datos del turno:', appointmentData);
-
-            // Agregar el horario a los ocupados
-            const dateKey = selectedDate.format('YYYY-MM-DD');
-            setOccupiedSlots(prev => ({
-                ...prev,
-                [dateKey]: [...(prev[dateKey] || []), selectedTime]
-            }));
-
-            // Resetear el formulario
-            if (formRef.current) {
-                formRef.current.reset();
+    const handleSubmitForm = (formData) => {
+        const turnoData = {
+            fecha: selectedDate.format('YYYY-MM-DD'),
+            hora: selectedTime,
+            Profesional_id: 2,
+            paciente:{
+                nombre: formData.patientFirstName,
+                apellido: formData.patientLastName,
+                email: formData.email + formData.emailDomain,
+                tipoDocumento: formData.documentType,
+                documento: formData.patientDNI,
+                fechaNacimiento: formData.patientDOB,
+                ObraSocial_id: formData.patientInsurance,
+                numeroAfiliado: formData.patientInsuranceNumber,
+                telefono: formData.phone,
+                sexo_biologico: formData.biologicalSex
             }
-
-            // Resetear estados
-            setSelectedTime(null);
-            setSelectedDate(dayjs());
-
-            // Mostrar mensaje de éxito
-            toast.success('Turno agendado con éxito');
-
-        } catch (error) {
-            console.error('Error al agendar turno:', error);
-            toast.error('Error al agendar el turno. Por favor, intente nuevamente.');
-        } finally {
-            setLoading(false);
-        }
+        };
+        createTurno(turnoData);
     };
 
-    // Verificar si un horario está ocupado
-    const isTimeSlotOccupied = (timeValue) => {
-        const dateKey = selectedDate.format('YYYY-MM-DD');
-        return occupiedSlots[dateKey]?.includes(timeValue) || false;
-    };
 
     return (
         <Section title="Reservar Turno" className="appointments-page">
@@ -109,8 +62,8 @@ const AppointmentsPage = () => {
                 </Alert>
                 <Form
                     ref={formRef}
-                    submitFunction={handleSubmitAppointment}
-                    loading={loading}
+                    submitFunction={handleSubmitForm}
+                    loading={creatingTurno}
                     errors={{}}
                     selectedDate={selectedDate}
                     selectedTime={selectedTime}
@@ -139,31 +92,34 @@ const AppointmentsPage = () => {
                         <span>Los domingos no hay atención.</span>
                     ) : (
                         <div>
-                            {horarios.map(horario => {
-                                const isOccupied = isTimeSlotOccupied(horario.value);
+                            {Array.isArray(horarios) && horarios.map((horario, index) => {
                                 return (
                                     <Chip
-                                        key={horario.value}
-                                        clickable={!isOccupied}
-                                        disabled={isOccupied}
-                                        label={isOccupied ? `${horario.label} (Ocupado)` : horario.label}
+                                        key={index}
+                                        clickable
+                                        label={horario}
                                         color="primary"
-                                        variant={selectedTime === horario.value ? "filled" : "outlined"}
+                                        variant={selectedTime === horario ? "filled" : "outlined"}
                                         sx={{
                                             margin: '0.5rem',
-                                            opacity: isOccupied ? 0.5 : 1,
-                                            cursor: isOccupied ? 'not-allowed' : 'pointer'
+                                            opacity: 1,
+                                            cursor: 'pointer'
                                         }}
-                                        onClick={() => !isOccupied && setSelectedTime(horario.value)}
+                                        onClick={() => setSelectedTime(horario)}
                                     />
                                 );
                             })}
+                            {!Array.isArray(horarios) && (<div style={{ marginTop: '1rem' }}>{horarios}</div>)}
                         </div>
                     )}
                 </div>
 
-                {isMobile && <Button variant="contained" color="primary" onClick={handleSubmitAppointment} disabled={loading || !selectedTime} sx={{ marginTop: '2rem' }} type='submit'>
-                    {loading ? 'Confirmando...' : 'Confirmar Turno'}
+                {isMobile && <Button variant="contained" color="primary" onClick={() => {
+                    if (formRef.current) {
+                        formRef.current.submitForm();
+                    }
+                }} disabled={creatingTurno || !selectedTime} sx={{ marginTop: '2rem' }} type='button'>
+                    {creatingTurno ? 'Confirmando...' : 'Confirmar Turno'}
                 </Button>}
             </div>
         </Section>

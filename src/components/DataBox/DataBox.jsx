@@ -1,8 +1,8 @@
-import { Avatar, Tooltip } from '@mui/material';
+import { Tooltip } from '@mui/material';
 import { Modal } from '../index';
 import './DataBox.css';
 
-const DataBox = ({ title, description, children, open, onClose, logo, onClick, noTooltip, onEdit, onDelete, editMode, onSave}) => {
+const DataBox = ({ title, description, children, open, onClose, onClick, noTooltip, onEdit, onDelete, editMode, onSave}) => {
     const handleEditClick = () => {
         if (editMode) {
             // Si está en modo edición, guardar los cambios
@@ -34,7 +34,6 @@ const DataBox = ({ title, description, children, open, onClose, logo, onClick, n
         <>
             <Tooltip title="Click para más detalles" arrow disableHoverListener={noTooltip}>
                 <div className="data-box" onClick={onClick} style={{ cursor: 'pointer' }}>
-                    <Avatar alt={title} src={`/${logo}`} />
                     <div className="col">
                         <h2>{title}</h2>
                         <h3>{description}</h3>
