@@ -50,14 +50,12 @@ const InsurancePage = () => {
     }
 
     const handleDeleteClick = (index, obra) => {
-        console.log(index, obra);
         setSelectedInsurance({ index, obra });
         setDeleteConfirmOpen(true);
     }
 
     const handleDeleteConfirm = () => {
         deleteObraSocial(selectedInsurance.obra.id);
-        console.log('Eliminando obra social:', selectedInsurance);
         toast.success(`Cobertura médica "${selectedInsurance.obra.siglas}" eliminada exitosamente`);
         setDeleteConfirmOpen(false);
         setOpenModals(prev => ({

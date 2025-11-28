@@ -8,16 +8,11 @@ export const AuthProvider = ({ children }) => {
     const [isLogged, setIsLogged] = useState(() => {
         // Inicializar desde session cookie
         const authCookie = Cookies.get('auth');
-        console.log('AuthContext initial isLogged from cookie:', authCookie);
         return authCookie ? true : false;
 
     });
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        console.log('AuthContext isLogged changed:', isLogged);
-    }, [isLogged]);
 
     const login = () => {
         setIsLogged(true);

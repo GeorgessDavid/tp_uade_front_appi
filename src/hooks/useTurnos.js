@@ -13,7 +13,6 @@ export const useTurnos = () => {
         setError(null);
 
         try {
-            console.log(turnoData);
             const response = await fetch(`${url}/api/turnos/create`, {
                 method: 'POST',
                 body: JSON.stringify(turnoData),
@@ -22,10 +21,7 @@ export const useTurnos = () => {
                 }
             });
 
-            console.log('Respuesta al crear turno:', response);
-
             const data = await response.json();
-            console.log('Datos recibidos al crear turno:', data);
             if (!response.ok) throw new Error(data.message || 'Error al crear el turno');
             setStatus(response.status);
             if (response.status === 201) toast.success('Turno creado con éxito');
