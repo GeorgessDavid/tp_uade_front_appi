@@ -10,11 +10,11 @@ import './SelectChip.css';
  */
 
 const SelectChip = ({ onClick, className, id, options, defaultValue }) => {
-    const { label, color } = options.find(option => option?.value === defaultValue?.value) || {};
+    const selectedOption = options.find(option => option.value === defaultValue) || options[0];
+    const { color } = selectedOption;
 
     return (
-        <select className={`select-chip ${className || ''} ${color}`} onChange={onClick} id={id} defaultValue={label}>
-            <option defaultValue={label}>{label}</option>
+        <select className={`select-chip ${className || ''} ${color}`} onChange={onClick} id={id} value={defaultValue}>
             {options.map((option, index) => (
                 <option key={index} value={option.value}>{option.label}</option>
             ))}

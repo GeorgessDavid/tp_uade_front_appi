@@ -20,14 +20,14 @@
 }
 
 .select-chip.secondary {
-    background-color: #f7c2d5;
-    border: 3px solid #b45e7c;
-    color: black;
+    background-color: #9b89d8;
+    border: 3px solid #9b89d8;
+    color: white;
 }
 
 .select-chip.success {
     background-color: #388e3c;
-    border: 3px solid #1b5e20;
+    border: 3px solid #388e3c;
     color: white
 }
 
@@ -38,13 +38,13 @@
 }
 
 .select-chip.warning {
-    background-color: #ed6c02;
-    border: 3px solid #b65c00;
+    background-color: #f57c00;
+    border: 3px solid #f57c00;
     color: white;
 }
 
 .select-chip.info {
     background-color: #0288d1;
-    border: 2px solid #01579b;
+    border: 2px solid #0288d1;
     color: white;
 }
